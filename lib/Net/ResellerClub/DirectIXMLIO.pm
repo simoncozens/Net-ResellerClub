@@ -117,7 +117,7 @@ sub GenerateHTMLTable
 			}
          else
          {
-	            $retstring .= $tdHead.$key.$tdFoot,"\n";
+	            $retstring .= $tdHead.$key.$tdFoot."\n";
 	            $retstring .= $tdHead. &GenerateHTMLTable( $thing->{$key}, $indent + $indentAmount ).$tdFoot."\n";  
          }
       $retstring .= $trFoot."\n";
