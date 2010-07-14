@@ -3,7 +3,6 @@ our $VERSION = "1.00";
 use Carp qw/croak/;
 use strict;
 use warnings;
-use Data::Dumper;
 use Module::Pluggable::Object;
 use Net::ResellerClub::DirectIXMLIO;
 my $finder = Module::Pluggable::Object->new(search_path=> ["Net::ResellerClub"], require => 1);
@@ -15,7 +14,6 @@ for my $c (grep /Service$/, $finder->plugins) {
 
 sub new {
     my ($self, %args) = @_;
-    warn Dumper \%args;
     exists $args{$_} || die "$_ argument not supplied" for qw/username password parent/;
     bless {
         auth => [ $args{username}, $args{password}, "reseller", "en", $args{parent} ],
@@ -58,7 +56,8 @@ sub _call {
         die("SOAP call failed: ".$som->faultstring);    
     }
     if (!defined($som->result) || !length($som->result)) {
-        die("SOAP call failed: ".Dumper($som));
+        require Data::Dumper;
+        die("SOAP call failed: ".Data::Dumper::Dumper($som));
     }
 
     return DirectIXMLIO::ParseXML($som->result);
